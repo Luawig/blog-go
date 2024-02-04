@@ -1,0 +1,16 @@
+[server]
+mode = "debug" # debug, release
+port = ":3000" # your server port
+
+[database]
+host = "" # your database host
+port = "3306" # your database
+database = "" # your database name
+username = "" # your database username
+password = "" # your database password
+
+[aliyun_oss]
+access_key = "" # your aliyun oss access key
+secret_key = "" # your aliyun oss secret key
+bucket = "" # your aliyun oss bucket
+aliyun_server = "" # your aliyun oss server
