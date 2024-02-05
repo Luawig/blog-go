@@ -1,8 +1,8 @@
 package utils
 
 const (
-	SUCCESS = 200
-	ERROR   = 500
+	Success    = 200
+	UnknownErr = 500
 
 	// User module error
 	ErrorUsernameUsed   = 1001
@@ -13,18 +13,23 @@ const (
 	ErrorTokenWrong     = 1006
 	ErrorTokenTypeWrong = 1007
 	ErrorUserNoRight    = 1008
+	ErrorEmailUsed      = 1009
+	ErrorUsernameEmpty  = 1010
+	ErrorEmailEmpty     = 1011
+	ErrorPasswordEmpty  = 1012
 
 	// Article module error
 	ErrorArticleNotExist = 2001
 
 	// Category module error
-	ErrorCategoryNameUsed = 3001
-	ErrorCategoryNotExist = 3002
+	ErrorCategoryNameUsed  = 3001
+	ErrorCategoryNotExist  = 3002
+	ErrorCategoryNameEmpty = 3003
 )
 
 var codeMsg = map[int]string{
-	SUCCESS: "OK",
-	ERROR:   "FAIL",
+	Success:    "OK",
+	UnknownErr: "Unknown error",
 
 	// User module error
 	ErrorUsernameUsed:   "Username has been used",
@@ -35,13 +40,18 @@ var codeMsg = map[int]string{
 	ErrorTokenWrong:     "Token is wrong",
 	ErrorTokenTypeWrong: "Token format is wrong",
 	ErrorUserNoRight:    "User has no right",
+	ErrorEmailUsed:      "Email has been used",
+	ErrorUsernameEmpty:  "Username is empty",
+	ErrorEmailEmpty:     "Email is empty",
+	ErrorPasswordEmpty:  "Password is empty",
 
 	// Article module error
 	ErrorArticleNotExist: "Article does not exist",
 
 	// Category module error
-	ErrorCategoryNameUsed: "Category name has been used",
-	ErrorCategoryNotExist: "Category does not exist",
+	ErrorCategoryNameUsed:  "Category name has been used",
+	ErrorCategoryNotExist:  "Category does not exist",
+	ErrorCategoryNameEmpty: "Category name is empty",
 }
 
 func GetMsg(code int) string {
@@ -49,5 +59,5 @@ func GetMsg(code int) string {
 	if ok {
 		return msg
 	}
-	return codeMsg[ERROR]
+	return codeMsg[UnknownErr]
 }

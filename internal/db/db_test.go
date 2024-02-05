@@ -16,12 +16,12 @@ func TestInitDB(t *testing.T) {
 	category1 := model.Category{Name: "CategoryTest1"}
 	category2 := model.Category{Name: "CategoryTest2"}
 
-	db.Create(&category1)
-	db.Create(&category2)
+	DB.Create(&category1)
+	DB.Create(&category2)
 
 	// Query categories
 	var categories []model.Category
-	db.Preload("Articles").Find(&categories)
+	DB.Preload("Articles").Find(&categories)
 	if len(categories) != 2 {
 		t.Errorf("Query categories failed")
 	}
@@ -31,8 +31,8 @@ func TestInitDB(t *testing.T) {
 	article1 := model.Article{
 		Title:        "TitleTest1",
 		Content:      "ContentTest1",
-		CreateTime:   time.Now(),
-		UpdateTime:   time.Now(),
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
 		CommentCount: 0,
 		ReadCount:    0,
 		Categories:   []*model.Category{&category1},
@@ -41,19 +41,19 @@ func TestInitDB(t *testing.T) {
 	article2 := model.Article{
 		Title:        "TitleTest2",
 		Content:      "ContentTest2",
-		CreateTime:   time.Now(),
-		UpdateTime:   time.Now(),
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
 		CommentCount: 0,
 		ReadCount:    0,
 		Categories:   []*model.Category{&category1, &category2},
 	}
 
-	db.Create(&article1)
-	db.Create(&article2)
+	DB.Create(&article1)
+	DB.Create(&article2)
 
 	// Query articles
 	var articles []model.Article
-	db.Preload("Categories").Preload("Comments").Find(&articles)
+	DB.Preload("Categories").Preload("Comments").Find(&articles)
 	if len(articles) != 2 {
 		t.Errorf("Query articles failed")
 	}
@@ -61,17 +61,17 @@ func TestInitDB(t *testing.T) {
 
 	// Add a user
 	user1 := model.User{
-		Username:      "UsernameTest1",
-		Password:      "PasswordTest1",
-		Email:         "Email1@Test.com",
-		CreateTime:    time.Now(),
-		LastLoginTime: time.Now(),
+		Username:    "UsernameTest1",
+		Password:    "PasswordTest1",
+		Email:       "Email1@Test.com",
+		CreatedAt:   time.Now(),
+		LastLoginAt: time.Now(),
 	}
-	db.Create(&user1)
+	DB.Create(&user1)
 
 	// Query users
 	var users []model.User
-	db.Preload("Comments").Find(&users)
+	DB.Preload("Comments").Find(&users)
 	if len(users) != 1 {
 		t.Errorf("Query users failed")
 	}
@@ -79,24 +79,24 @@ func TestInitDB(t *testing.T) {
 
 	// Add two comments
 	comment1 := model.Comment{
-		Content: "ContentTest1",
-		Time:    time.Now(),
-		Article: article1,
-		User:    user1,
+		Content:   "ContentTest1",
+		CreatedAt: time.Now(),
+		Article:   article1,
+		User:      user1,
 	}
 	time.Sleep(1 * time.Second)
 	comment2 := model.Comment{
-		Content: "ContentTest2",
-		Time:    time.Now(),
-		Article: article2,
-		User:    user1,
+		Content:   "ContentTest2",
+		CreatedAt: time.Now(),
+		Article:   article2,
+		User:      user1,
 	}
-	db.Create(&comment1)
-	db.Create(&comment2)
+	DB.Create(&comment1)
+	DB.Create(&comment2)
 
 	// Query comments
 	var comments []model.Comment
-	db.Preload("Article").Preload("User").Find(&comments)
+	DB.Preload("Article").Preload("User").Find(&comments)
 	if len(comments) != 2 {
 		t.Errorf("Query comments failed")
 	}

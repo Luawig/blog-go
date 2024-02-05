@@ -10,8 +10,8 @@ type Article struct {
 	gorm.Model
 	Title        string    `gorm:"type:varchar(100);not null" json:"title"`
 	Content      string    `gorm:"type:longtext" json:"content"`
-	CreateTime   time.Time `gorm:"type:datetime;not null" json:"create_time"`
-	UpdateTime   time.Time `gorm:"type:datetime;not null" json:"update_time"`
+	CreatedAt    time.Time `gorm:"type:datetime;not null" json:"created_at"`
+	UpdatedAt    time.Time `gorm:"type:datetime;not null" json:"updated_at"`
 	CommentCount int       `gorm:"type:int;not null;default:0" json:"comment_count"`
 	ReadCount    int       `gorm:"type:int;not null;default:0" json:"read_count"`
 
