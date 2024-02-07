@@ -211,21 +211,21 @@ func TestUpdateArticle(t *testing.T) {
 		t.Fatal("CreateArticle failed")
 	}
 
-	articles, code := GetArticle(1)
+	article, code := GetArticle(1)
 	if code != utils.Success {
 		t.Fatal("GetArticle failed")
 	}
 
-	articles.Title = "test3"
-	if code := UpdateArticle(articles); code != utils.Success {
+	article.Title = "test3"
+	if code := UpdateArticle(1, article); code != utils.Success {
 		t.Fatal("UpdateArticle failed")
 	}
 
-	articles, code = GetArticle(1)
+	article, code = GetArticle(1)
 	if code != utils.Success {
 		t.Fatal("GetArticle failed")
 	}
-	if articles.Title != "test3" {
+	if article.Title != "test3" {
 		t.Fatal("UpdateArticle failed")
 	}
 }

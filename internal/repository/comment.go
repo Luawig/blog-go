@@ -4,6 +4,7 @@ import (
 	"blog-go/internal/db"
 	"blog-go/internal/model"
 	"blog-go/pkg/utils"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -75,6 +76,25 @@ func GetCommentListByArticle(articleId, pageSize, pageNum int) ([]*model.Comment
 		return nil, utils.UnknownErr
 	}
 	return comments, utils.Success
+}
+
+// UpdateComment edits a comment in the database, and returns a status code.
+func UpdateComment(id int, data *model.Comment) int {
+	var comment model.Comment
+	err := db.DB.Where("id = ?", id).First(&comment).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ErrorCommentNotExist
+		}
+		return utils.UnknownErr
+	}
+
+	comment.ID = uint(id)
+	err = db.DB.Model(&comment).Updates(data).Error
+	if err != nil {
+		return utils.UnknownErr
+	}
+	return utils.Success
 }
 
 // DeleteComment deletes a comment from the database, and returns a status code.

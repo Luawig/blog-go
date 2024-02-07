@@ -84,8 +84,18 @@ func GetArticleListByTitle(title string, pageSize, pageNum int) ([]model.Article
 }
 
 // UpdateArticle updates an article in the database, and returns a status code.
-func UpdateArticle(article *model.Article) int {
-	err := db.DB.Save(article).Error
+func UpdateArticle(id int, data *model.Article) int {
+	var article model.Article
+	err := db.DB.Where("id = ?", id).First(&article).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ErrorArticleNotExist
+		}
+		return utils.UnknownErr
+	}
+
+	data.ID = uint(id)
+	err = db.DB.Model(&article).Updates(data).Error
 	if err != nil {
 		return utils.UnknownErr
 	}

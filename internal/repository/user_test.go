@@ -5,6 +5,7 @@ import (
 	"blog-go/internal/db"
 	"blog-go/internal/model"
 	"blog-go/pkg/utils"
+	"strconv"
 	"testing"
 )
 
@@ -71,7 +72,7 @@ func TestGetUser(t *testing.T) {
 	db.InitTestDB()
 
 	if code := CreateUser(&model.User{
-		Username: "TestCreateUser1",
+		Username: "TestGetUser1",
 		Email:    "Test1@email.com",
 		Password: "TestPassword",
 	}); code != utils.Success {
@@ -79,7 +80,7 @@ func TestGetUser(t *testing.T) {
 	}
 
 	if code := CreateUser(&model.User{
-		Username: "TestCreateUser2",
+		Username: "TestGetUser2",
 		Email:    "Test2@email.com",
 		Password: "TestPassword",
 	}); code != utils.Success {
@@ -90,7 +91,7 @@ func TestGetUser(t *testing.T) {
 	if code != utils.Success {
 		t.Fatal("GetUser failed")
 	}
-	if user.Username != "TestCreateUser1" {
+	if user.Username != "TestGetUser1" {
 		t.Fatal("GetUser failed")
 	}
 	if user.Email != "Test1@email.com" {
@@ -101,7 +102,7 @@ func TestGetUser(t *testing.T) {
 	if code != utils.Success {
 		t.Fatal("GetUser failed")
 	}
-	if user.Username != "TestCreateUser2" {
+	if user.Username != "TestGetUser2" {
 		t.Fatal("GetUser failed")
 	}
 	if user.Email != "Test2@email.com" {
@@ -117,33 +118,70 @@ func TestGetUserList(t *testing.T) {
 	config.InitConfig()
 	db.InitTestDB()
 
-	if code := CreateUser(&model.User{
-		Username: "TestCreateUser1",
-		Email:    "Test1@email.com",
-		Password: "TestPassword",
-	}); code != utils.Success {
-		t.Fatal("CreateUser failed")
+	for i := 0; i < 10; i++ {
+		if code := CreateUser(&model.User{
+			Username: "TestGetUserList" + strconv.Itoa(i),
+			Email:    "Test" + strconv.Itoa(i) + "@email.com",
+			Password: "TestPassword",
+		}); code != utils.Success {
+			t.Fatal("CreateUser failed")
+		}
 	}
 
-	if code := CreateUser(&model.User{
-		Username: "TestCreateUser2",
-		Email:    "Test2@email.com",
-		Password: "TestPassword",
-	}); code != utils.Success {
-		t.Fatal("CreateUser failed")
-	}
-
-	users, code := GetUserList()
+	users, code := GetUserList(3, 2)
 	if code != utils.Success {
 		t.Fatal("GetUserList failed")
 	}
-	if len(users) != 2 {
+	if len(users) != 3 {
 		t.Fatal("GetUserList failed")
 	}
-	if users[0].Username != "TestCreateUser1" {
+
+	users, code = GetUserList(3, 4)
+	if code != utils.Success {
 		t.Fatal("GetUserList failed")
 	}
-	if users[1].Email != "Test2@email.com" {
+	if len(users) != 1 {
+		t.Fatal("GetUserList failed")
+	}
+}
+
+func TestGetUserListByUsername(t *testing.T) {
+	config.InitConfig()
+	db.InitTestDB()
+
+	for i := 0; i < 10; i++ {
+		if code := CreateUser(&model.User{
+			Username: "TestUsername" + strconv.Itoa(i),
+			Email:    "Test" + strconv.Itoa(i) + "@email.com",
+			Password: "TestPassword",
+		}); code != utils.Success {
+			t.Fatal("CreateUser failed")
+		}
+	}
+
+	for i := 0; i < 10; i++ {
+		if code := CreateUser(&model.User{
+			Username: "JustUsername" + strconv.Itoa(i),
+			Email:    "Just" + strconv.Itoa(i) + "@email.com",
+			Password: "TestPassword",
+		}); code != utils.Success {
+			t.Fatal("CreateUser failed")
+		}
+	}
+
+	users, code := GetUserListByUsername("Test", 3, 2)
+	if code != utils.Success {
+		t.Fatal("GetUserList failed")
+	}
+	if len(users) != 3 {
+		t.Fatal("GetUserList failed")
+	}
+
+	users, code = GetUserListByUsername("Test", 3, 4)
+	if code != utils.Success {
+		t.Fatal("GetUserList failed")
+	}
+	if len(users) != 1 {
 		t.Fatal("GetUserList failed")
 	}
 }

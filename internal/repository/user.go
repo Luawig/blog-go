@@ -10,12 +10,12 @@ import (
 )
 
 // CheckUsername checks if a user empty or exists in the database, and returns a status code.
-func CheckUsername(username string) int {
+func CheckUsername(id int, username string) int {
 	if username == "" {
 		return utils.ErrorUsernameEmpty
 	}
 	var user model.User
-	err := db.DB.Where("username = ?", username).First(&user).Error
+	err := db.DB.Where("username = ? AND id <> ?", username, id).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return utils.Success
@@ -26,12 +26,12 @@ func CheckUsername(username string) int {
 }
 
 // CheckEmail checks if an email empty or exists in the database, and returns a status code.
-func CheckEmail(email string) int {
+func CheckEmail(id int, email string) int {
 	if email == "" {
 		return utils.ErrorEmailEmpty
 	}
 	var user model.User
-	err := db.DB.Where("email = ?", email).First(&user).Error
+	err := db.DB.Where("email = ? AND id <> ?", email, id).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return utils.Success
@@ -43,10 +43,10 @@ func CheckEmail(email string) int {
 
 // CreateUser adds a user to the database, and returns a status code.
 func CreateUser(user *model.User) int {
-	if code := CheckUsername(user.Username); code != utils.Success {
+	if code := CheckUsername(-1, user.Username); code != utils.Success {
 		return code
 	}
-	if code := CheckEmail(user.Email); code != utils.Success {
+	if code := CheckEmail(-1, user.Email); code != utils.Success {
 		return code
 	}
 	if user.Password == "" {
@@ -73,9 +73,28 @@ func GetUser(id int) (*model.User, int) {
 }
 
 // GetUserList gets a list of users from the database, and returns the list and a status code.
-func GetUserList() ([]model.User, int) {
+func GetUserList(pageSize, pageNum int) ([]model.User, int) {
 	var users []model.User
-	err := db.DB.Find(&users).Error
+	err := db.DB.Select("id", "username", "email", "created_at", "last_login_at").
+		Offset((pageNum - 1) * pageSize).
+		Limit(pageSize).
+		Order("created_at DESC").
+		Find(&users).Error
+	if err != nil {
+		return nil, utils.UnknownErr
+	}
+	return users, utils.Success
+}
+
+// GetUserListByUsername gets a list of users from the database by username, and returns the list and a status code.
+func GetUserListByUsername(username string, pageSize, pageNum int) ([]model.User, int) {
+	var users []model.User
+	err := db.DB.Select("id", "username", "email", "created_at", "last_login_at").
+		Where("username like ?", "%"+username+"%").
+		Offset((pageNum - 1) * pageSize).
+		Limit(pageSize).
+		Order("created_at DESC").
+		Find(&users).Error
 	if err != nil {
 		return nil, utils.UnknownErr
 	}
@@ -93,16 +112,17 @@ func UpdateUser(id int, data *model.User) int {
 		return utils.UnknownErr
 	}
 
-	if code := CheckUsername(data.Username); code != utils.Success {
+	if code := CheckUsername(id, data.Username); code != utils.Success {
 		return code
 	}
-	if code := CheckEmail(data.Email); code != utils.Success {
+	if code := CheckEmail(id, data.Email); code != utils.Success {
 		return code
 	}
 	if data.Password == "" {
 		return utils.ErrorPasswordEmpty
 	}
 
+	data.ID = uint(id)
 	err = db.DB.Model(&user).Updates(data).Error
 	if err != nil {
 		return utils.UnknownErr

@@ -10,12 +10,12 @@ import (
 )
 
 // CheckCategoryName checks if a category name empty or exists in the database, and returns a status code.
-func CheckCategoryName(name string) int {
+func CheckCategoryName(id int, name string) int {
 	if name == "" {
 		return utils.ErrorCategoryNameEmpty
 	}
 	var category model.Category
-	err := db.DB.Where("name = ?", name).First(&category).Error
+	err := db.DB.Where("name = ? AND id <> ?", name, id).First(&category).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return utils.Success
@@ -27,7 +27,7 @@ func CheckCategoryName(name string) int {
 
 // CreateCategory adds a category to the database, and returns a status code.
 func CreateCategory(category *model.Category) int {
-	if code := CheckCategoryName(category.Name); code != utils.Success {
+	if code := CheckCategoryName(-1, category.Name); code != utils.Success {
 		return code
 	}
 	err := db.DB.Create(category).Error
@@ -77,10 +77,11 @@ func UpdateCategory(id int, data *model.Category) int {
 		return utils.UnknownErr
 	}
 
-	if code := CheckCategoryName(data.Name); code != utils.Success {
+	if code := CheckCategoryName(id, data.Name); code != utils.Success {
 		return code
 	}
 
+	data.ID = uint(id)
 	err = db.DB.Model(&category).Updates(data).Error
 	if err != nil {
 		return utils.UnknownErr

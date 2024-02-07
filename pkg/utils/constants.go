@@ -25,6 +25,12 @@ const (
 	ErrorCategoryNameUsed  = 3001
 	ErrorCategoryNotExist  = 3002
 	ErrorCategoryNameEmpty = 3003
+
+	// Comment module error
+	ErrorCommentNotExist = 4001
+
+	// Common error
+	ErrorInvalidParam = 5001
 )
 
 var codeMsg = map[int]string{
@@ -52,6 +58,12 @@ var codeMsg = map[int]string{
 	ErrorCategoryNameUsed:  "Category name has been used",
 	ErrorCategoryNotExist:  "Category does not exist",
 	ErrorCategoryNameEmpty: "Category name is empty",
+
+	// Comment module error
+	ErrorCommentNotExist: "Comment does not exist",
+
+	// Common error
+	ErrorInvalidParam: "Invalid parameter",
 }
 
 func GetMsg(code int) string {

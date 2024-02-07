@@ -10,6 +10,7 @@ type Comment struct {
 	gorm.Model
 	Content   string    `gorm:"type:varchar(500);not null;" json:"content"`
 	CreatedAt time.Time `gorm:"type:datetime;not null" json:"created_at"`
+	UpdatedAt time.Time `gorm:"type:datetime;not null" json:"updated_at"`
 
 	Article   *Article `gorm:"foreignKey:ArticleID;constraint:OnDelete:CASCADE" json:"article"`
 	ArticleID uint     `gorm:"type:int;not null" json:"article_id"`

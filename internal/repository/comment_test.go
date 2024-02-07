@@ -224,6 +224,65 @@ func TestGetCommentListByArticle(t *testing.T) {
 	}
 }
 
+func TestUpdateComment(t *testing.T) {
+	config.InitConfig()
+	db.InitTestDB()
+
+	if code := CreateUser(&model.User{
+		Username: "test",
+		Email:    "test@email.com",
+		Password: "TestPassword",
+	}); code != utils.Success {
+		t.Fatal("CreateUser failed")
+	}
+
+	user, code := GetUser(1)
+	if code != utils.Success {
+		t.Fatal("GetUser failed")
+	}
+
+	if code := CreateArticle(&model.Article{
+		Title:   "test",
+		Content: "test",
+	}); code != utils.Success {
+		t.Fatal("CreateArticle failed")
+	}
+
+	article, code := GetArticle(1)
+	if code != utils.Success {
+		t.Fatal("GetArticle failed")
+	}
+
+	if code := CreateComment(&model.Comment{
+		Content: "test",
+		User:    user,
+		Article: article,
+	}); code != utils.Success {
+		t.Fatal("CreateComment failed")
+	}
+
+	comment, code := GetComment(1)
+	if code != utils.Success {
+		t.Fatal("GetComment failed")
+	}
+	if comment == nil {
+		t.Fatal("GetComment failed")
+	}
+
+	comment.Content = "test2"
+	if code := UpdateComment(1, comment); code != utils.Success {
+		t.Fatal("UpdateComment failed")
+	}
+
+	comment, code = GetComment(1)
+	if code != utils.Success {
+		t.Fatal("GetComment failed")
+	}
+	if comment.Content != "test2" {
+		t.Fatal("UpdateComment failed")
+	}
+}
+
 func TestDeleteComment(t *testing.T) {
 	config.InitConfig()
 	db.InitTestDB()
