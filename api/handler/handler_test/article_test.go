@@ -28,7 +28,7 @@ func TestCreateArticle(t *testing.T) {
 		t.Fatalf("CreateArticle Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	if err != nil {
 		t.Fatalf("CreateArticle Error: %v", err)
 	}
@@ -61,9 +61,9 @@ func TestGetArticle(t *testing.T) {
 		t.Fatalf("CreateArticle Error: %v", err)
 	}
 
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/article/1")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/article/1")
 	if err != nil {
 		t.Fatalf("GetArticle Error: %v", err)
 	}
@@ -103,10 +103,10 @@ func TestGetArticleList(t *testing.T) {
 			Content: "test" + strconv.Itoa(i),
 		}
 		articleBytes, _ := json.Marshal(article)
-		_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+		_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	}
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/articles?page_num=4&page_size=3")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/articles?page_num=4&page_size=3")
 	if err != nil {
 		t.Fatalf("GetArticleList Error: %v", err)
 	}
@@ -141,7 +141,7 @@ func TestGetArticleListByCategory(t *testing.T) {
 		Name: "test",
 	}
 	categoryBytes, _ := json.Marshal(category)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
 	category.ID = 1
 
 	for i := 0; i < 10; i++ {
@@ -151,10 +151,10 @@ func TestGetArticleListByCategory(t *testing.T) {
 			Categories: []*model.Category{&category},
 		}
 		articleBytes, _ := json.Marshal(article)
-		_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+		_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	}
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/articles/category/1")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/articles/category/1")
 	if err != nil {
 		t.Fatalf("GetArticleListByCategory Error: %v", err)
 	}
@@ -189,7 +189,7 @@ func TestGetArticleListByTitle(t *testing.T) {
 		Name: "test",
 	}
 	categoryBytes, _ := json.Marshal(category)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
 	category.ID = 1
 
 	for i := 0; i < 10; i++ {
@@ -199,7 +199,7 @@ func TestGetArticleListByTitle(t *testing.T) {
 			Categories: []*model.Category{&category},
 		}
 		articleBytes, _ := json.Marshal(article)
-		_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+		_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	}
 
 	for i := 0; i < 10; i++ {
@@ -209,10 +209,10 @@ func TestGetArticleListByTitle(t *testing.T) {
 			Categories: []*model.Category{&category},
 		}
 		articleBytes, _ := json.Marshal(article)
-		_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+		_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	}
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/articles/test?page_num=2&page_size=3")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/articles/test?page_num=2&page_size=3")
 	if err != nil {
 		t.Fatalf("GetArticleListByCategory Error: %v", err)
 	}
@@ -249,11 +249,11 @@ func TestUpdateArticle(t *testing.T) {
 	}
 
 	articleBytes, _ := json.Marshal(article)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 
 	article.Title = "test1"
 	articleBytes, _ = json.Marshal(article)
-	req, _ := http.NewRequest("PUT", "http://localhost"+config.GetConfig().Server.Port+"/api/article/1", bytes.NewReader(articleBytes))
+	req, _ := http.NewRequest("PUT", "http://localhost"+config.GetServerConfig().Port+"/api/article/1", bytes.NewReader(articleBytes))
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatalf("UpdateArticle Error: %v", err)
@@ -262,7 +262,7 @@ func TestUpdateArticle(t *testing.T) {
 		t.Fatalf("UpdateArticle Error: %v", resp.Status)
 	}
 
-	resp, _ = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/article/1")
+	resp, _ = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/article/1")
 
 	var respData utils.Response
 	err = json.NewDecoder(resp.Body).Decode(&respData)
@@ -293,9 +293,9 @@ func TestDeleteArticle(t *testing.T) {
 	}
 
 	articleBytes, _ := json.Marshal(article)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 
-	req, _ := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetConfig().Server.Port+"/api/article/1", nil)
+	req, _ := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetServerConfig().Port+"/api/article/1", nil)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatalf("DeleteArticle Error: %v", err)
@@ -304,7 +304,7 @@ func TestDeleteArticle(t *testing.T) {
 		t.Fatalf("DeleteArticle Error: %v", resp.Status)
 	}
 
-	resp, _ = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/article/1")
+	resp, _ = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/article/1")
 
 	var respData utils.Response
 	err = json.NewDecoder(resp.Body).Decode(&respData)

@@ -1,6 +1,7 @@
 [server]
 mode = "debug" # debug, release
 port = ":3000" # your server port
+jwt_key = "" # your jwt key
 
 [database]
 host = "" # your database host

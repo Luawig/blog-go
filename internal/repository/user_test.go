@@ -295,3 +295,24 @@ func TestDeleteUser(t *testing.T) {
 		t.Fatal("DeleteUser failed")
 	}
 }
+
+func TestGetUserWithPasswordByUsername(t *testing.T) {
+	config.InitConfig()
+	db.InitTestDB()
+
+	if code := CreateUser(&model.User{
+		Username: "TestUsername",
+		Email:    "TestEmail",
+		Password: "TestPassword",
+	}); code != utils.Success {
+		t.Fatal("CreateUser failed")
+	}
+
+	user, code := GetUserWithPasswordByUsername("TestUsername")
+	if code != utils.Success {
+		t.Fatal("GetUserPassword failed")
+	}
+	if user.Password != "TestPassword" {
+		t.Fatal("GetUserPassword failed")
+	}
+}

@@ -11,8 +11,9 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Mode string `toml:"mode"`
-	Port string `toml:"port"`
+	Mode   string `toml:"mode"`
+	Port   string `toml:"port"`
+	JwtKey string `tom:"jwt_key"`
 }
 
 type DatabaseConfig struct {

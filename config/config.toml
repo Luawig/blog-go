@@ -1,6 +1,7 @@
 [server]
 mode = "debug"
 port = ":3000"
+jwt_key = "kFc3XsS9/NH1c0pmFpZ+5w=="
 
 [database]
 host = "localhost"

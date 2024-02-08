@@ -27,7 +27,7 @@ func TestCreateCategory(t *testing.T) {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
 	if err != nil {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
@@ -44,7 +44,7 @@ func TestCreateCategory(t *testing.T) {
 		t.Fatalf("CreateCategory Error: %v", respData.Message)
 	}
 
-	resp, err = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
+	resp, err = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
 	if err != nil {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
@@ -67,7 +67,7 @@ func TestGetCategory(t *testing.T) {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
 	if err != nil {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
@@ -75,7 +75,7 @@ func TestGetCategory(t *testing.T) {
 		t.Fatalf("CreateCategory Error: %v", resp.Status)
 	}
 
-	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/category/1")
+	resp, err = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/category/1")
 	if err != nil {
 		t.Fatalf("GetCategory Error: %v", err)
 	}
@@ -116,7 +116,7 @@ func TestGetCategoryList(t *testing.T) {
 			t.Fatalf("CreateCategory Error: %v", err)
 		}
 
-		resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
+		resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
 		if err != nil {
 			t.Fatalf("CreateCategory Error: %v", err)
 		}
@@ -125,7 +125,7 @@ func TestGetCategoryList(t *testing.T) {
 		}
 	}
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/categories")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/categories")
 	if err != nil {
 		t.Fatalf("GetCategoryList Error: %v", err)
 	}
@@ -165,7 +165,7 @@ func TestUpdateCategory(t *testing.T) {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
 	if err != nil {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
@@ -176,7 +176,7 @@ func TestUpdateCategory(t *testing.T) {
 	category.Name = "test1"
 	categoryBytes, _ = json.Marshal(category)
 
-	req, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetConfig().Server.Port+"/api/category/1", bytes.NewReader(categoryBytes))
+	req, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetServerConfig().Port+"/api/category/1", bytes.NewReader(categoryBytes))
 	if err != nil {
 		t.Fatalf("UpdateCategory Error: %v", err)
 	}
@@ -189,7 +189,7 @@ func TestUpdateCategory(t *testing.T) {
 		t.Fatalf("UpdateCategory Error: %v", resp.Status)
 	}
 
-	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/category/1")
+	resp, err = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/category/1")
 	if err != nil {
 		t.Fatalf("GetCategory Error: %v", err)
 	}
@@ -229,7 +229,7 @@ func TestDeleteCategory(t *testing.T) {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/category", "application/json", bytes.NewReader(categoryBytes))
 	if err != nil {
 		t.Fatalf("CreateCategory Error: %v", err)
 	}
@@ -237,7 +237,7 @@ func TestDeleteCategory(t *testing.T) {
 		t.Fatalf("CreateCategory Error: %v", resp.Status)
 	}
 
-	req, err := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetConfig().Server.Port+"/api/category/1", nil)
+	req, err := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetServerConfig().Port+"/api/category/1", nil)
 	if err != nil {
 		t.Fatalf("DeleteCategory Error: %v", err)
 	}
@@ -259,7 +259,7 @@ func TestDeleteCategory(t *testing.T) {
 		t.Fatalf("DeleteCategory Error: %v", respData.Message)
 	}
 
-	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/category/1")
+	resp, err = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/category/1")
 	if err != nil {
 		t.Fatalf("GetCategory Error: %v", err)
 	}

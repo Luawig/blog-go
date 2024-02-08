@@ -3,6 +3,7 @@ package handler
 import (
 	"blog-go/internal/model"
 	"blog-go/internal/repository"
+	"blog-go/middleware"
 	"blog-go/pkg/utils"
 	"strconv"
 
@@ -173,4 +174,36 @@ func encryptUserPassword(password string) (string, error) {
 		return "", err
 	}
 	return string(hash), nil
+}
+
+func Login(c *gin.Context) {
+	var loginInfo struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	err := c.ShouldBindJSON(&loginInfo)
+	if err != nil {
+		utils.ResponseInvalidParam(c)
+		return
+	}
+
+	user, code := repository.GetUserWithPasswordByUsername(loginInfo.Username)
+	if code != utils.Success {
+		utils.ResponseError(c, code)
+		return
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginInfo.Password))
+	if err != nil {
+		utils.ResponseError(c, utils.ErrorPasswordWrong)
+		return
+	}
+
+	token, err := middleware.GenerateToken(user.ID, user.Username)
+	if err != nil {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+
+	utils.ResponseSuccess(c, token)
 }

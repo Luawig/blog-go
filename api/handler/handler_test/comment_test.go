@@ -24,7 +24,7 @@ func TestCreateComment(t *testing.T) {
 		Email:    "test@email.com",
 	}
 	userBytes, _ := json.Marshal(user)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	user.ID = 1
 
 	article := model.Article{
@@ -32,7 +32,7 @@ func TestCreateComment(t *testing.T) {
 		Content: "test",
 	}
 	articleBytes, _ := json.Marshal(article)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	article.ID = 1
 
 	comment := model.Comment{
@@ -45,7 +45,7 @@ func TestCreateComment(t *testing.T) {
 		t.Fatalf("CreateComment Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
 	if err != nil {
 		t.Fatalf("CreateComment Error: %v", err)
 	}
@@ -74,7 +74,7 @@ func TestGetComment(t *testing.T) {
 		Email:    "test@email.com",
 	}
 	userBytes, _ := json.Marshal(user)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	user.ID = 1
 
 	article := model.Article{
@@ -82,7 +82,7 @@ func TestGetComment(t *testing.T) {
 		Content: "test",
 	}
 	articleBytes, _ := json.Marshal(article)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	article.ID = 1
 
 	comment := model.Comment{
@@ -92,9 +92,9 @@ func TestGetComment(t *testing.T) {
 	}
 	commentBytes, _ := json.Marshal(comment)
 
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/comment/1")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/comment/1")
 	if err != nil {
 		t.Fatalf("GetComment Error: %v", err)
 	}
@@ -131,7 +131,7 @@ func TestGetCommentList(t *testing.T) {
 		Email:    "test@email.com",
 	}
 	userBytes, _ := json.Marshal(user)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	user.ID = 1
 
 	article := model.Article{
@@ -139,7 +139,7 @@ func TestGetCommentList(t *testing.T) {
 		Content: "test",
 	}
 	articleBytes, _ := json.Marshal(article)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	article.ID = 1
 
 	for i := 0; i < 10; i++ {
@@ -150,10 +150,10 @@ func TestGetCommentList(t *testing.T) {
 		}
 		commentBytes, _ := json.Marshal(comment)
 
-		_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
+		_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
 	}
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/comments?page_num=4&page_size=3")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/comments?page_num=4&page_size=3")
 	if err != nil {
 		t.Fatalf("GetComment Error: %v", err)
 	}
@@ -190,7 +190,7 @@ func TestGetCommentListByArticle(t *testing.T) {
 		Email:    "test@email.com",
 	}
 	userBytes, _ := json.Marshal(user)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	user.ID = 1
 
 	article := model.Article{
@@ -198,7 +198,7 @@ func TestGetCommentListByArticle(t *testing.T) {
 		Content: "test",
 	}
 	articleBytes, _ := json.Marshal(article)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	article.ID = 1
 
 	for i := 0; i < 10; i++ {
@@ -209,10 +209,10 @@ func TestGetCommentListByArticle(t *testing.T) {
 		}
 		commentBytes, _ := json.Marshal(comment)
 
-		_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
+		_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
 	}
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/comments/article/1?page_num=4&page_size=3")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/comments/article/1?page_num=4&page_size=3")
 	if err != nil {
 		t.Fatalf("GetComment Error: %v", err)
 	}
@@ -249,7 +249,7 @@ func TestUpdateComment(t *testing.T) {
 		Email:    "test@email.com",
 	}
 	userBytes, _ := json.Marshal(user)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	user.ID = 1
 
 	article := model.Article{
@@ -257,7 +257,7 @@ func TestUpdateComment(t *testing.T) {
 		Content: "test",
 	}
 	articleBytes, _ := json.Marshal(article)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	article.ID = 1
 
 	comment := model.Comment{
@@ -267,11 +267,11 @@ func TestUpdateComment(t *testing.T) {
 	}
 	commentBytes, _ := json.Marshal(comment)
 
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
 
 	comment.Content = "testCommentUpdate"
 	commentBytes, _ = json.Marshal(comment)
-	req, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetConfig().Server.Port+"/api/comment/1", bytes.NewReader(commentBytes))
+	req, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetServerConfig().Port+"/api/comment/1", bytes.NewReader(commentBytes))
 	if err != nil {
 		t.Fatalf("UpdateComment Error: %v", err)
 	}
@@ -283,7 +283,7 @@ func TestUpdateComment(t *testing.T) {
 		t.Fatalf("UpdateComment Error: %v", resp.Status)
 	}
 
-	resp, _ = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/comment/1")
+	resp, _ = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/comment/1")
 	var respData utils.Response
 	_ = json.NewDecoder(resp.Body).Decode(&respData)
 
@@ -304,7 +304,7 @@ func TestDeleteComment(t *testing.T) {
 		Email:    "test@email.com",
 	}
 	userBytes, _ := json.Marshal(user)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	user.ID = 1
 
 	article := model.Article{
@@ -312,7 +312,7 @@ func TestDeleteComment(t *testing.T) {
 		Content: "test",
 	}
 	articleBytes, _ := json.Marshal(article)
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/article", "application/json", bytes.NewReader(articleBytes))
 	article.ID = 1
 
 	comment := model.Comment{
@@ -322,9 +322,9 @@ func TestDeleteComment(t *testing.T) {
 	}
 	commentBytes, _ := json.Marshal(comment)
 
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
 
-	req, err := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetConfig().Server.Port+"/api/comment/1", nil)
+	req, err := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetServerConfig().Port+"/api/comment/1", nil)
 	if err != nil {
 		t.Fatalf("DeleteComment Error: %v", err)
 	}
@@ -336,7 +336,7 @@ func TestDeleteComment(t *testing.T) {
 		t.Fatalf("DeleteComment Error: %v", resp.Status)
 	}
 
-	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/comment/1")
+	resp, err = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/comment/1")
 	if err != nil {
 		t.Fatalf("GetComment Error: %v", err)
 	}

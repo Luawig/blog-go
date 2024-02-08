@@ -62,7 +62,8 @@ func CreateUser(user *model.User) int {
 // GetUser gets a user's information from the database, and returns the user and a status code.
 func GetUser(id int) (*model.User, int) {
 	var user model.User
-	err := db.DB.Where("id = ?", id).First(&user).Error
+	err := db.DB.Select("id", "username", "email", "created_at", "last_login_at").
+		Where("id = ?", id).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, utils.ErrorUserNotExist
@@ -164,4 +165,17 @@ func DeleteUser(id int) int {
 	}
 
 	return utils.Success
+}
+
+// GetUserWithPasswordByUsername gets a user's information and password from the database, and returns the user and a status code.
+func GetUserWithPasswordByUsername(username string) (*model.User, int) {
+	var user model.User
+	err := db.DB.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, utils.ErrorUserNotExist
+		}
+		return nil, utils.UnknownErr
+	}
+	return &user, utils.Success
 }

@@ -29,7 +29,7 @@ func TestCreateUser(t *testing.T) {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	if err != nil {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
@@ -63,7 +63,7 @@ func TestGetUser(t *testing.T) {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	if err != nil {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
@@ -71,7 +71,7 @@ func TestGetUser(t *testing.T) {
 		t.Fatalf("CreateUser Error: %v", resp.Status)
 	}
 
-	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/user/1")
+	resp, err = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/user/1")
 	if err != nil {
 		t.Fatalf("GetUser Error: %v", err)
 	}
@@ -117,7 +117,7 @@ func TestGetUserList(t *testing.T) {
 			t.Fatalf("CreateUser Error: %v", err)
 		}
 
-		resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+		resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 		if err != nil {
 			t.Fatalf("CreateUser Error: %v", err)
 		}
@@ -126,7 +126,7 @@ func TestGetUserList(t *testing.T) {
 		}
 	}
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/users?page_size=3&page_num=4")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/users?page_size=3&page_num=4")
 	if err != nil {
 		t.Fatalf("GetUserList Error: %v", err)
 	}
@@ -169,7 +169,7 @@ func TestGetUserListByUsername(t *testing.T) {
 			t.Fatalf("CreateUser Error: %v", err)
 		}
 
-		resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+		resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 		if err != nil {
 			t.Fatalf("CreateUser Error: %v", err)
 		}
@@ -178,7 +178,7 @@ func TestGetUserListByUsername(t *testing.T) {
 		}
 	}
 
-	resp, err := http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/users/test")
+	resp, err := http.Get("http://localhost" + config.GetServerConfig().Port + "/api/users/test")
 	if err != nil {
 		t.Fatalf("GetUserList Error: %v", err)
 	}
@@ -220,7 +220,7 @@ func TestUpdateUser(t *testing.T) {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	if err != nil {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
@@ -231,7 +231,7 @@ func TestUpdateUser(t *testing.T) {
 	user.Email = "test2@email.com"
 	userBytes, _ = json.Marshal(user)
 
-	res, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetConfig().Server.Port+"/api/user/1", bytes.NewReader(userBytes))
+	res, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetServerConfig().Port+"/api/user/1", bytes.NewReader(userBytes))
 	if err != nil {
 		t.Fatalf("UpdateUser Error: %v", err)
 	}
@@ -243,7 +243,7 @@ func TestUpdateUser(t *testing.T) {
 		t.Fatalf("UpdateUser Error: %v", resp.Status)
 	}
 
-	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/user/1")
+	resp, err = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/user/1")
 	if err != nil {
 		t.Fatalf("GetUserList Error: %v", err)
 	}
@@ -285,7 +285,7 @@ func TestUpdateUserPassword(t *testing.T) {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
 
-	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 	if err != nil {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
@@ -298,7 +298,7 @@ func TestUpdateUserPassword(t *testing.T) {
 	}
 	userBytes, _ = json.Marshal(user)
 
-	res, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetConfig().Server.Port+"/api/user/1/password", bytes.NewReader(userBytes))
+	res, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetServerConfig().Port+"/api/user/1/password", bytes.NewReader(userBytes))
 	if err != nil {
 		t.Fatalf("UpdateUser Error: %v", err)
 	}
@@ -310,7 +310,7 @@ func TestUpdateUserPassword(t *testing.T) {
 		t.Fatalf("UpdateUser Error: %v", resp.Status)
 	}
 
-	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/user/1")
+	resp, err = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/user/1")
 	if err != nil {
 		t.Fatalf("GetUserList Error: %v", err)
 	}
@@ -335,9 +335,9 @@ func TestDeleteUser(t *testing.T) {
 		t.Fatalf("CreateUser Error: %v", err)
 	}
 
-	_, _ = http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 
-	req, err := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetConfig().Server.Port+"/api/user/1", nil)
+	req, err := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetServerConfig().Port+"/api/user/1", nil)
 	if err != nil {
 		t.Fatalf("DeleteUser Error: %v", err)
 	}
@@ -349,11 +349,50 @@ func TestDeleteUser(t *testing.T) {
 		t.Fatalf("DeleteUser Error: %v", resp.Status)
 	}
 
-	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/user/1")
+	resp, err = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/user/1")
 	if err != nil {
 		t.Fatalf("GetUser Error: %v", err)
 	}
 	if resp.StatusCode == http.StatusOK {
 		t.Fatalf("GetUser Error: %v", resp.Status)
+	}
+}
+
+func TestLogin(t *testing.T) {
+	config.InitConfig()
+	db.InitTestDB()
+	go routes.InitRouter()
+
+	user := model.User{
+		Username: "TestUsername",
+		Password: "TestPassword",
+		Email:    "Test@email.com",
+	}
+	userBytes, _ := json.Marshal(user)
+	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+
+	resp, err := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/login", "application/json", bytes.NewReader(userBytes))
+	if err != nil {
+		t.Fatalf("Login Error: %v", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("Login Error: %v", resp.Status)
+	}
+
+	var respData utils.Response
+	err = json.NewDecoder(resp.Body).Decode(&respData)
+	if err != nil {
+		t.Fatalf("Login Error: %v", err)
+	}
+	if respData.Status != utils.Success {
+		t.Fatalf("Login Error: %v", respData.Message)
+	}
+
+	token, ok := respData.Data.(string)
+	if !ok {
+		t.Fatalf("Login Error: %v", "Data format error")
+	}
+	if token == "" {
+		t.Fatalf("Login Error: %v", "Data error")
 	}
 }

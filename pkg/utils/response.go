@@ -36,3 +36,10 @@ func ResponseError(c *gin.Context, code int) {
 		"message": GetMsg(code),
 	})
 }
+
+func ResponseAuthWrong(c *gin.Context) {
+	c.JSON(http.StatusUnauthorized, gin.H{
+		"status":  ErrorTokenWrong,
+		"message": GetMsg(ErrorTokenWrong),
+	})
+}
