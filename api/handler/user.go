@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func CreateUser(c *gin.Context) {
@@ -14,6 +15,12 @@ func CreateUser(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		utils.ResponseInvalidParam(c)
+		return
+	}
+
+	data.Password, err = encryptUserPassword(data.Password)
+	if err != nil {
+		utils.ResponseError(c, utils.UnknownErr)
 		return
 	}
 
@@ -115,6 +122,35 @@ func UpdateUser(c *gin.Context) {
 	utils.ResponseSuccess(c, nil)
 }
 
+func UpdateUserPassword(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		utils.ResponseInvalidParam(c)
+		return
+	}
+
+	var data model.User
+	err = c.ShouldBindJSON(&data)
+	if err != nil {
+		utils.ResponseInvalidParam(c)
+		return
+	}
+
+	data.Password, err = encryptUserPassword(data.Password)
+	if err != nil {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+
+	code := repository.UpdateUserPassword(id, &data)
+	if code != utils.Success {
+		utils.ResponseError(c, code)
+		return
+	}
+
+	utils.ResponseSuccess(c, nil)
+}
+
 func DeleteUser(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -129,4 +165,12 @@ func DeleteUser(c *gin.Context) {
 	}
 
 	utils.ResponseSuccess(c, nil)
+}
+
+func encryptUserPassword(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hash), nil
 }

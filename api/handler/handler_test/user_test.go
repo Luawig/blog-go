@@ -269,6 +269,56 @@ func TestUpdateUser(t *testing.T) {
 	}
 }
 
+func TestUpdateUserPassword(t *testing.T) {
+	config.InitConfig()
+	db.InitTestDB()
+	go routes.InitRouter()
+
+	user := model.User{
+		Username: "test",
+		Password: "test",
+		Email:    "test@email.com",
+	}
+
+	userBytes, err := json.Marshal(user)
+	if err != nil {
+		t.Fatalf("CreateUser Error: %v", err)
+	}
+
+	resp, err := http.Post("http://localhost"+config.GetConfig().Server.Port+"/api/user", "application/json", bytes.NewReader(userBytes))
+	if err != nil {
+		t.Fatalf("CreateUser Error: %v", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("CreateUser Error: %v", resp.Status)
+	}
+
+	user = model.User{
+		Password: "test2",
+	}
+	userBytes, _ = json.Marshal(user)
+
+	res, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetConfig().Server.Port+"/api/user/1/password", bytes.NewReader(userBytes))
+	if err != nil {
+		t.Fatalf("UpdateUser Error: %v", err)
+	}
+	resp, err = http.DefaultClient.Do(res)
+	if err != nil {
+		t.Fatalf("UpdateUser Error: %v", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("UpdateUser Error: %v", resp.Status)
+	}
+
+	resp, err = http.Get("http://localhost" + config.GetConfig().Server.Port + "/api/user/1")
+	if err != nil {
+		t.Fatalf("GetUserList Error: %v", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("GetUserList Error: %v", resp.Status)
+	}
+}
+
 func TestDeleteUser(t *testing.T) {
 	config.InitConfig()
 	db.InitTestDB()

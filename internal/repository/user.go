@@ -130,6 +130,29 @@ func UpdateUser(id int, data *model.User) int {
 	return utils.Success
 }
 
+// UpdateUserPassword edits a user's password in the database, and returns a status code.
+func UpdateUserPassword(id int, data *model.User) int {
+	var user model.User
+	err := db.DB.Where("id = ?", id).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return utils.ErrorUserNotExist
+		}
+		return utils.UnknownErr
+	}
+
+	if data.Password == "" {
+		return utils.ErrorPasswordEmpty
+	}
+
+	data.ID = uint(id)
+	err = db.DB.Model(&user).Updates(data).Error
+	if err != nil {
+		return utils.UnknownErr
+	}
+	return utils.Success
+}
+
 // DeleteUser deletes a user from the database, and returns a status code.
 func DeleteUser(id int) int {
 	if err := db.DB.Where("user_id = ?", id).Delete(&model.Comment{}).Error; err != nil {

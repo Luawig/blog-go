@@ -44,6 +44,7 @@ func InitRouter() {
 		api.GET("users", handler.GetUserList)
 		api.GET("users/:username", handler.GetUserListByUsername)
 		api.PUT("user/:id", handler.UpdateUser)
+		api.PUT("user/:id/password", handler.UpdateUserPassword)
 		api.DELETE("user/:id", handler.DeleteUser)
 	}
 

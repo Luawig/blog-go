@@ -243,6 +243,25 @@ func TestUpdateUser(t *testing.T) {
 	}
 }
 
+func TestUpdateUserPassword(t *testing.T) {
+	config.InitConfig()
+	db.InitTestDB()
+
+	if code := CreateUser(&model.User{
+		Username: "TestUsername",
+		Email:    "Test@email.com",
+		Password: "TestPassword",
+	}); code != utils.Success {
+		t.Fatal("CreateUser failed")
+	}
+
+	if code := UpdateUserPassword(1, &model.User{
+		Password: "TestPassword1",
+	}); code != utils.Success {
+		t.Fatal("UpdateUserPassword failed")
+	}
+}
+
 func TestDeleteUser(t *testing.T) {
 	config.InitConfig()
 	db.InitTestDB()
