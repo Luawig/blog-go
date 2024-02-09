@@ -228,14 +228,20 @@ func TestUpdateUser(t *testing.T) {
 		t.Fatalf("CreateUser Error: %v", resp.Status)
 	}
 
+	resp, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/login", "application/json", bytes.NewReader(userBytes))
+	var respData utils.Response
+	_ = json.NewDecoder(resp.Body).Decode(&respData)
+	token, _ := respData.Data.(string)
+
 	user.Email = "test2@email.com"
 	userBytes, _ = json.Marshal(user)
 
-	res, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetServerConfig().Port+"/api/user/1", bytes.NewReader(userBytes))
+	req, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetServerConfig().Port+"/api/user/1", bytes.NewReader(userBytes))
 	if err != nil {
 		t.Fatalf("UpdateUser Error: %v", err)
 	}
-	resp, err = http.DefaultClient.Do(res)
+	req.Header.Set("Authorization", "Bearer "+token)
+	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatalf("UpdateUser Error: %v", err)
 	}
@@ -251,7 +257,6 @@ func TestUpdateUser(t *testing.T) {
 		t.Fatalf("GetUserList Error: %v", resp.Status)
 	}
 
-	var respData utils.Response
 	err = json.NewDecoder(resp.Body).Decode(&respData)
 	if err != nil {
 		t.Fatalf("GetUserList Error: %v", err)
@@ -293,6 +298,11 @@ func TestUpdateUserPassword(t *testing.T) {
 		t.Fatalf("CreateUser Error: %v", resp.Status)
 	}
 
+	resp, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/login", "application/json", bytes.NewReader(userBytes))
+	var respData utils.Response
+	_ = json.NewDecoder(resp.Body).Decode(&respData)
+	token, _ := respData.Data.(string)
+
 	user = model.User{
 		Password: "test2",
 	}
@@ -302,6 +312,7 @@ func TestUpdateUserPassword(t *testing.T) {
 	if err != nil {
 		t.Fatalf("UpdateUser Error: %v", err)
 	}
+	res.Header.Set("Authorization", "Bearer "+token)
 	resp, err = http.DefaultClient.Do(res)
 	if err != nil {
 		t.Fatalf("UpdateUser Error: %v", err)
@@ -337,11 +348,17 @@ func TestDeleteUser(t *testing.T) {
 
 	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/user", "application/json", bytes.NewReader(userBytes))
 
+	resp, _ := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/login", "application/json", bytes.NewReader(userBytes))
+	var respData utils.Response
+	_ = json.NewDecoder(resp.Body).Decode(&respData)
+	token, _ := respData.Data.(string)
+
 	req, err := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetServerConfig().Port+"/api/user/1", nil)
 	if err != nil {
 		t.Fatalf("DeleteUser Error: %v", err)
 	}
-	resp, err := http.DefaultClient.Do(req)
+	req.Header.Set("Authorization", "Bearer "+token)
+	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatalf("DeleteUser Error: %v", err)
 	}

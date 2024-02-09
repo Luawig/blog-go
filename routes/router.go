@@ -16,14 +16,6 @@ func InitRouter() {
 	auth := r.Group("/api")
 	auth.Use(middleware.JWTAuthMiddleware())
 	{
-		// Article
-		auth.PUT("article/:id", handler.UpdateArticle)
-		auth.DELETE("article/:id", handler.DeleteArticle)
-
-		// Category
-		auth.PUT("category/:id", handler.UpdateCategory)
-		auth.DELETE("category/:id", handler.DeleteCategory)
-
 		// Comment
 		auth.PUT("comment/:id", handler.UpdateComment)
 		auth.DELETE("comment/:id", handler.DeleteComment)
@@ -45,11 +37,15 @@ func InitRouter() {
 		public.GET("articles", handler.GetArticleList)
 		public.GET("articles/category/:id", handler.GetArticleListByCategory)
 		public.GET("articles/:title", handler.GetArticleListByTitle)
+		public.PUT("article/:id", handler.UpdateArticle)
+		public.DELETE("article/:id", handler.DeleteArticle)
 
 		// Category
 		public.POST("category", handler.CreateCategory)
 		public.GET("category/:id", handler.GetCategory)
 		public.GET("categories", handler.GetCategoryList)
+		public.PUT("category/:id", handler.UpdateCategory)
+		public.DELETE("category/:id", handler.DeleteCategory)
 
 		// Comment
 		public.POST("comment", handler.CreateComment)

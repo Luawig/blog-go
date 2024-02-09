@@ -101,9 +101,25 @@ func GetUserListByUsername(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+	userID, ok := userID.(uint)
+	if !ok {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		utils.ResponseInvalidParam(c)
+		return
+	}
+
+	if userID != uint(id) {
+		utils.ResponseError(c, utils.ErrorPermissionDenied)
 		return
 	}
 
@@ -124,9 +140,25 @@ func UpdateUser(c *gin.Context) {
 }
 
 func UpdateUserPassword(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+	userID, ok := userID.(uint)
+	if !ok {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		utils.ResponseInvalidParam(c)
+		return
+	}
+
+	if userID != uint(id) {
+		utils.ResponseError(c, utils.ErrorPermissionDenied)
 		return
 	}
 
@@ -153,9 +185,25 @@ func UpdateUserPassword(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+	userID, ok := userID.(uint)
+	if !ok {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		utils.ResponseInvalidParam(c)
+		return
+	}
+
+	if userID != uint(id) {
+		utils.ResponseError(c, utils.ErrorPermissionDenied)
 		return
 	}
 

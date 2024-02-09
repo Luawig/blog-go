@@ -98,6 +98,17 @@ func GetCommentListByArticle(c *gin.Context) {
 }
 
 func UpdateComment(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+	userID, ok := userID.(uint)
+	if !ok {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		utils.ResponseInvalidParam(c)
@@ -111,7 +122,17 @@ func UpdateComment(c *gin.Context) {
 		return
 	}
 
-	code := repository.UpdateComment(id, &data)
+	uid, code := repository.GetCommentUserID(id)
+	if code != utils.Success {
+		utils.ResponseError(c, code)
+		return
+	}
+	if uid != userID {
+		utils.ResponseError(c, utils.ErrorPermissionDenied)
+		return
+	}
+
+	code = repository.UpdateComment(id, &data)
 	if code != utils.Success {
 		utils.ResponseError(c, code)
 		return
@@ -121,13 +142,34 @@ func UpdateComment(c *gin.Context) {
 }
 
 func DeleteComment(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+	userID, ok := userID.(uint)
+	if !ok {
+		utils.ResponseError(c, utils.UnknownErr)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		utils.ResponseInvalidParam(c)
 		return
 	}
 
-	code := repository.DeleteComment(id)
+	uid, code := repository.GetCommentUserID(id)
+	if code != utils.Success {
+		utils.ResponseError(c, code)
+		return
+	}
+	if uid != userID {
+		utils.ResponseError(c, utils.ErrorPermissionDenied)
+		return
+	}
+
+	code = repository.DeleteComment(id)
 	if code != utils.Success {
 		utils.ResponseError(c, code)
 		return

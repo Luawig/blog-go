@@ -78,6 +78,16 @@ func GetCommentListByArticle(articleId, pageSize, pageNum int) ([]*model.Comment
 	return comments, utils.Success
 }
 
+// GetCommentUserID gets a comment's user id from the database, and returns the user id and a status code.
+func GetCommentUserID(id int) (uint, int) {
+	var comment model.Comment
+	err := db.DB.Select("user_id").Where("id = ?", id).First(&comment).Error
+	if err != nil {
+		return 0, utils.UnknownErr
+	}
+	return comment.UserID, utils.Success
+}
+
 // UpdateComment edits a comment in the database, and returns a status code.
 func UpdateComment(id int, data *model.Comment) int {
 	var comment model.Comment

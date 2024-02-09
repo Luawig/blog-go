@@ -269,13 +269,19 @@ func TestUpdateComment(t *testing.T) {
 
 	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
 
+	resp, _ := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/login", "application/json", bytes.NewReader(userBytes))
+	var respData utils.Response
+	_ = json.NewDecoder(resp.Body).Decode(&respData)
+	token, _ := respData.Data.(string)
+
 	comment.Content = "testCommentUpdate"
 	commentBytes, _ = json.Marshal(comment)
 	req, err := http.NewRequest(http.MethodPut, "http://localhost"+config.GetServerConfig().Port+"/api/comment/1", bytes.NewReader(commentBytes))
 	if err != nil {
 		t.Fatalf("UpdateComment Error: %v", err)
 	}
-	resp, err := http.DefaultClient.Do(req)
+	req.Header.Set("Authorization", "Bearer "+token)
+	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatalf("UpdateComment Error: %v", err)
 	}
@@ -284,7 +290,6 @@ func TestUpdateComment(t *testing.T) {
 	}
 
 	resp, _ = http.Get("http://localhost" + config.GetServerConfig().Port + "/api/comment/1")
-	var respData utils.Response
 	_ = json.NewDecoder(resp.Body).Decode(&respData)
 
 	commentData, _ := respData.Data.(map[string]interface{})
@@ -324,11 +329,17 @@ func TestDeleteComment(t *testing.T) {
 
 	_, _ = http.Post("http://localhost"+config.GetServerConfig().Port+"/api/comment", "application/json", bytes.NewReader(commentBytes))
 
+	resp, _ := http.Post("http://localhost"+config.GetServerConfig().Port+"/api/login", "application/json", bytes.NewReader(userBytes))
+	var respData utils.Response
+	_ = json.NewDecoder(resp.Body).Decode(&respData)
+	token, _ := respData.Data.(string)
+
 	req, err := http.NewRequest(http.MethodDelete, "http://localhost"+config.GetServerConfig().Port+"/api/comment/1", nil)
 	if err != nil {
 		t.Fatalf("DeleteComment Error: %v", err)
 	}
-	resp, err := http.DefaultClient.Do(req)
+	req.Header.Set("Authorization", "Bearer "+token)
+	resp, err = http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatalf("DeleteComment Error: %v", err)
 	}
