@@ -32,6 +32,9 @@ const (
 
 	// Common error
 	ErrorInvalidParam = 5001
+
+	// Upload error
+	ErrorUploadSaveFile = 6001
 )
 
 var codeMsg = map[int]string{
@@ -66,6 +69,9 @@ var codeMsg = map[int]string{
 
 	// Common error
 	ErrorInvalidParam: "Invalid parameter",
+
+	// Upload error
+	ErrorUploadSaveFile: "Failed to save file",
 }
 
 func GetMsg(code int) string {

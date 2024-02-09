@@ -16,6 +16,9 @@ func InitRouter() {
 	auth := r.Group("/api")
 	auth.Use(middleware.JWTAuthMiddleware())
 	{
+		// Upload
+		auth.POST("upload", handler.UploadFile)
+
 		// Comment
 		auth.PUT("comment/:id", handler.UpdateComment)
 		auth.DELETE("comment/:id", handler.DeleteComment)
