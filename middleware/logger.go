@@ -19,12 +19,12 @@ func Logger() gin.HandlerFunc {
 	logger.SetLevel(logrus.DebugLevel)
 
 	logPath := "log"
-	logFileName := "blog-go"
+	logFileName := "blog-go.log"
 	fileName := path.Join(logPath, logFileName)
 
 	_ = os.MkdirAll(logPath, 0755)
 	writer, err := rotatelogs.New(
-		fileName+".%Y%m%d%H%M",
+		fileName+".%Y%m%d",
 		rotatelogs.WithLinkName(fileName),
 		rotatelogs.WithMaxAge(time.Duration(168)*time.Hour),
 		rotatelogs.WithRotationTime(time.Duration(24)*time.Hour),
