@@ -10,7 +10,8 @@ import (
 
 func InitRouter() {
 	gin.SetMode(config.GetConfig().Server.Mode)
-	r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Recovery(), middleware.Logger())
 
 	// Auth group
 	auth := r.Group("/api")

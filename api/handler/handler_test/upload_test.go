@@ -15,21 +15,6 @@ import (
 	"testing"
 )
 
-/*
-func UploadFile(c *gin.Context) {
-	file, _ := c.FormFile("file")
-	objectName := file.Filename
-	localFile := file.Filename
-	url, code := oss.UploadFile(objectName, localFile)
-	if code != utils.Success {
-		utils.ResponseError(c, utils.ErrorUploadSaveFile)
-		return
-	}
-	utils.ResponseSuccess(c, url)
-}
-
-*/
-
 func TestUploadFile(t *testing.T) {
 	config.InitConfig()
 	db.InitTestDB()
