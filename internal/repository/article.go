@@ -3,7 +3,7 @@ package repository
 import (
 	"blog-go/internal/db"
 	"blog-go/internal/model"
-	"blog-go/pkg/utils"
+	"blog-go/utils"
 	"errors"
 
 	"gorm.io/gorm"

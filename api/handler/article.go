@@ -3,7 +3,7 @@ package handler
 import (
 	"blog-go/internal/model"
 	"blog-go/internal/repository"
-	"blog-go/pkg/utils"
+	"blog-go/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

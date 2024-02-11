@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"blog-go/config"
-	"blog-go/pkg/utils"
+	"blog-go/utils"
 	"fmt"
 	"strings"
 	"time"

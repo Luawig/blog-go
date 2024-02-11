@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"blog-go/pkg/oss"
-	"blog-go/pkg/utils"
+	"blog-go/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +13,7 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 
-	url, code := oss.UploadFile(file)
+	url, code := utils.UploadFile(file)
 	if code != utils.Success {
 		utils.ResponseError(c, utils.ErrorUploadSaveFile)
 		return

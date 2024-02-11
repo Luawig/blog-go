@@ -4,7 +4,7 @@ import (
 	"blog-go/config"
 	"blog-go/internal/db"
 	"blog-go/internal/model"
-	"blog-go/pkg/utils"
+	"blog-go/utils"
 	"fmt"
 	"testing"
 )

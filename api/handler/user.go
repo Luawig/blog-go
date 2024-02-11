@@ -4,7 +4,7 @@ import (
 	"blog-go/internal/model"
 	"blog-go/internal/repository"
 	"blog-go/middleware"
-	"blog-go/pkg/utils"
+	"blog-go/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -17,6 +17,11 @@ func CreateUser(c *gin.Context) {
 	if err != nil {
 		utils.ResponseInvalidParam(c)
 		return
+	}
+
+	_, err = utils.Validate(&data)
+	if err != nil {
+		utils.ResponseError(c, utils.UnknownErr)
 	}
 
 	data.Password, err = encryptUserPassword(data.Password)
