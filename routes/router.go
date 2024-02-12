@@ -6,12 +6,18 @@ import (
 	"blog-go/middleware"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "blog-go/docs"
 )
 
 func InitRouter() {
 	gin.SetMode(config.GetConfig().Server.Mode)
 	r := gin.New()
 	r.Use(gin.Recovery(), middleware.Logger())
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Auth group
 	auth := r.Group("/api")

@@ -11,6 +11,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// CreateUser - Creates a user
+// @Summary Create a user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param user body model.User true "User"
+// @Success 200 {object} utils.Response
+// @Router /api/user [post]
 func CreateUser(c *gin.Context) {
 	var data model.User
 	err := c.ShouldBindJSON(&data)
@@ -38,6 +46,14 @@ func CreateUser(c *gin.Context) {
 	utils.ResponseSuccess(c, nil)
 }
 
+// GetUser - Gets a single user by ID
+// @Summary Get a user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} utils.Response
+// @Router /api/user/{id} [get]
 func GetUser(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -54,6 +70,15 @@ func GetUser(c *gin.Context) {
 	utils.ResponseSuccess(c, user)
 }
 
+// GetUserList - Gets a list of users with pagination
+// @Summary List users
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param page_size query int false "Page Size"
+// @Param page_num query int false "Page Number"
+// @Success 200 {object} utils.Response
+// @Router /api/users [get]
 func GetUserList(c *gin.Context) {
 	pageSize, err := strconv.Atoi(c.DefaultQuery("page_size", "10"))
 	if err != nil {
@@ -79,6 +104,16 @@ func GetUserList(c *gin.Context) {
 	utils.ResponseSuccess(c, users)
 }
 
+// GetUserListByUsername - Gets a list of users filtered by username with pagination
+// @Summary List users by username
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param username path string true "Username"
+// @Param page_size query int false "Page Size"
+// @Param page_num query int false "Page Number"
+// @Success 200 {object} utils.Response
+// @Router /api/users/{username} [get]
 func GetUserListByUsername(c *gin.Context) {
 	username := c.Param("username")
 	pageSize, err := strconv.Atoi(c.DefaultQuery("page_size", "10"))
@@ -105,6 +140,15 @@ func GetUserListByUsername(c *gin.Context) {
 	utils.ResponseSuccess(c, users)
 }
 
+// UpdateUser - Updates a user by ID
+// @Summary Update a user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param user body model.User true "User"
+// @Success 200 {object} utils.Response
+// @Router /api/user/{id} [put]
 func UpdateUser(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists {
@@ -144,6 +188,15 @@ func UpdateUser(c *gin.Context) {
 	utils.ResponseSuccess(c, nil)
 }
 
+// UpdateUserPassword - Updates a user's password by ID
+// @Summary Update a user's password
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param password body string true "New Password"
+// @Success 200 {object} utils.Response
+// @Router /api/user/{id}/password [put]
 func UpdateUserPassword(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists {
@@ -189,6 +242,14 @@ func UpdateUserPassword(c *gin.Context) {
 	utils.ResponseSuccess(c, nil)
 }
 
+// DeleteUser - Deletes a user by ID
+// @Summary Delete a user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} utils.Response
+// @Router /api/user/{id} [delete]
 func DeleteUser(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists {
@@ -229,11 +290,21 @@ func encryptUserPassword(password string) (string, error) {
 	return string(hash), nil
 }
 
+type loginRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+// Login - Authenticates a user and returns a token
+// @Summary Login a user
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param login body loginRequest true "Login Information"
+// @Success 200 {object} utils.Response
+// @Router /api/login [post]
 func Login(c *gin.Context) {
-	var loginInfo struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
+	var loginInfo loginRequest
 	err := c.ShouldBindJSON(&loginInfo)
 	if err != nil {
 		utils.ResponseInvalidParam(c)

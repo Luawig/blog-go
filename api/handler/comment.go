@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// CreateComment - Creates a comment
+// @Summary Create a comment
+// @Tags comment
+// @Accept json
+// @Produce json
+// @Param comment body model.Comment true "Comment"
+// @Success 200 {object} utils.Response
+// @Router /api/comment [post]
 func CreateComment(c *gin.Context) {
 	var data model.Comment
 	err := c.ShouldBindJSON(&data)
@@ -25,6 +33,15 @@ func CreateComment(c *gin.Context) {
 	utils.ResponseSuccess(c, nil)
 }
 
+// GetComment - Gets a single comment by ID
+// @Summary Get a comment
+// @Tags comment
+// @Accept json
+// @Produce json
+// @Param id path int true "Comment ID"
+// @Success 200 {object} utils.Response
+// @Failure 400 {object} utils.Response
+// @Router /api/comment/{id} [get]
 func GetComment(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -41,6 +58,15 @@ func GetComment(c *gin.Context) {
 	utils.ResponseSuccess(c, comment)
 }
 
+// GetCommentList - Gets a list of comments with pagination
+// @Summary List comments
+// @Tags comment
+// @Accept json
+// @Produce json
+// @Param page_size query int false "Page Size"
+// @Param page_num query int false "Page Number"
+// @Success 200 {object} utils.Response
+// @Router /api/comments [get]
 func GetCommentList(c *gin.Context) {
 	pageSize, err := strconv.Atoi(c.DefaultQuery("page_size", "10"))
 	if err != nil {
@@ -66,6 +92,16 @@ func GetCommentList(c *gin.Context) {
 	utils.ResponseSuccess(c, comments)
 }
 
+// GetCommentListByArticle - Gets a list of comments for a specific article with pagination
+// @Summary List comments by article
+// @Tags comment
+// @Accept json
+// @Produce json
+// @Param id path int true "Article ID"
+// @Param page_size query int false "Page Size"
+// @Param page_num query int false "Page Number"
+// @Success 200 {object} utils.Response
+// @Router /api/comments/article/{id} [get]
 func GetCommentListByArticle(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -97,6 +133,16 @@ func GetCommentListByArticle(c *gin.Context) {
 	utils.ResponseSuccess(c, comments)
 }
 
+// UpdateComment - Updates a comment by ID
+// @Summary Update a comment
+// @Tags comment
+// @Accept json
+// @Produce json
+// @Param id path int true "Comment ID"
+// @Param comment body model.Comment true "Comment"
+// @Success 200 {object} utils.Response
+// @Failure 403 "Permission Denied"
+// @Router /api/comment/{id} [put]
 func UpdateComment(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists {
@@ -141,6 +187,15 @@ func UpdateComment(c *gin.Context) {
 	utils.ResponseSuccess(c, nil)
 }
 
+// DeleteComment - Deletes a comment by ID
+// @Summary Delete a comment
+// @Tags comment
+// @Accept json
+// @Produce json
+// @Param id path int true "Comment ID"
+// @Success 200 {object} utils.Response
+// @Failure 403 "Permission Denied"
+// @Router /api/comment/{id} [delete]
 func DeleteComment(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists {
